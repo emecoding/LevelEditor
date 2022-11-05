@@ -92,4 +92,14 @@ public class Window
     public static int get_width() { return WIDTH; }
     public static int get_height() { return HEIGHT; }
 
+    public static boolean collides(float[] rect1, float[] rect2)//[x,y,w,h]
+    {
+        return (
+                rect1[0] < rect2[0] + rect2[2] &&
+                        rect1[0] + rect1[2] > rect2[0] &&
+                        rect1[1] < rect2[1] + rect2[3] &&
+                        rect1[3] + rect1[1] > rect2[1]
+        );
+    }
+
 }

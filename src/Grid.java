@@ -1,6 +1,7 @@
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -76,12 +77,19 @@ public class Grid
     {
         Shader.unbind_every_shader();
         this.m_shader.use();
-        Matrix4f transform = new Matrix4f();
-        transform.translate(new Vector3f(100.0f, 100.0f, 0.0f));
-        transform.scale(new Vector3f(GRID_WIDTH, GRID_HEIGHT, 1.0f));
-        this.m_shader.upload_mat4("transform", transform);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_LINES, 0, 8);
+        for(int x = 0; x < Window.get_width(); x++)
+        {
+            for(int y = 0; y < Window.get_height(); y++)
+            {
+                Matrix4f transform = new Matrix4f();
+                transform.translate(new Vector3f(x*GRID_WIDTH, y*GRID_HEIGHT, 0.0f));
+                transform.scale(new Vector3f(GRID_WIDTH, GRID_HEIGHT, 1.0f));
+                this.m_shader.upload_mat4("transform", transform);
+                glBindVertexArray(VAO);
+                glDrawArrays(GL_LINES, 0, 8);
+            }
+        }
+
         glBindVertexArray(0);
         Shader.unbind_every_shader();
     }
