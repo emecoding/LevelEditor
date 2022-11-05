@@ -24,7 +24,7 @@ public class Grid
     {
         this.m_shader = new Shader("res/grid.vert", "res/grid.frag");
 
-        float vertices[] = new float[]{
+        /*float vertices[] = new float[]{
                 // pos      // tex
                 0.0f, 1.0f,
                 1.0f, 0.0f,
@@ -33,7 +33,22 @@ public class Grid
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f
-        };
+        };*/
+        float vertices[] = new float[]
+                {
+                        0.0f, 0.0f,
+                        0.0f, 1.0f,
+
+                        0.0f, 1.0f,
+                        1.0f, 1.0f,
+
+                        1.0f, 1.0f,
+                        1.0f, 0.0f,
+
+                        1.0f, 0.0f,
+                        0.0f, 0.0f
+
+                };
 
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(6 * 4);
         vertexData.put(vertices);
@@ -66,7 +81,7 @@ public class Grid
         transform.scale(new Vector3f(GRID_WIDTH, GRID_HEIGHT, 1.0f));
         this.m_shader.upload_mat4("transform", transform);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_LINES, 0, 6);
+        glDrawArrays(GL_LINES, 0, 8);
         glBindVertexArray(0);
         Shader.unbind_every_shader();
     }
