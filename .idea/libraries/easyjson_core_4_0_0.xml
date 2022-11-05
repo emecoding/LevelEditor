@@ -1,0 +1,44 @@
+<component name="libraryTable">
+  <library name="easyjson-core-4.0.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../LWJGL/easyjson-core-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/java-json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/joml-1.10.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/json-20220924.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/langx-java-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-assimp-3.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-assimp-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-assimp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-glfw-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-glfw.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-openal-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-openal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-opengl-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-opengl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-stb-natives-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-stb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/simplejson-to-easyjson-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/sqlite-jdbc-3.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-assimp-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-glfw-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-openal-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-opengl-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-stb-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../LWJGL/java-json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-assimp-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-glfw-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-openal-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-opengl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/lwjgl-stb-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../LWJGL/sqlite-jdbc-3.7.2.jar!/" />
+    </SOURCES>
+  </library>
+</component>
