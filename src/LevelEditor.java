@@ -72,7 +72,7 @@ public class LevelEditor
             Vector2f mouse_pos = Window.get_mouse_position();
             Texture tex = this.m_textureManager.TEXTURES.get(i);
             tex.use();
-            this.m_renderer.render_sprite(new Vector2f(x, y), new Vector2f(button_width, button_height));
+            this.m_renderer.render_sprite(new Vector2f(x, y), new Vector2f(button_width, button_height), false);
             Texture.unbind_every_texture();
 
             float[] rect1 = new float[]
@@ -125,7 +125,7 @@ public class LevelEditor
         Texture tex = this.m_textureManager.TEXTURES.get(this.m_current_item[0]);
 
         tex.use();
-        this.m_renderer.render_sprite(new Vector2f(x, y), new Vector2f(this.m_current_item[1], this.m_current_item[2]));
+        this.m_renderer.render_sprite(new Vector2f(x - Camera.CAMERA_OFF_SET_X, y - Camera.CAMERA_OFF_SET_Y), new Vector2f(this.m_current_item[1], this.m_current_item[2]));
         Texture.unbind_every_texture();
 
         if(Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_RIGHT) && !just_pressed_right_mouse_button)
@@ -179,12 +179,14 @@ public class LevelEditor
                     speed *= -1;
 
                 this.m_camera.Move(new Vector2f(speed, 0.0f));
+                Camera.CAMERA_OFF_SET_X += speed;
             }
             else if(this.CAMERA_DIR == 1)
             {
                 if(Window.get_mouse_position().y < Window.get_height()/2)
                     speed *= -1;
 
+                Camera.CAMERA_OFF_SET_Y += speed;
                 this.m_camera.Move(new Vector2f(0.0f, speed));
             }
 

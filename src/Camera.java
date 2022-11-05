@@ -5,6 +5,8 @@ public class Camera
 {
     private Vector2f position;
     public static Matrix4f ViewMatrix;
+    public static int CAMERA_OFF_SET_X = 0;
+    public static int CAMERA_OFF_SET_Y = 0;
 
     public Camera(Vector2f pos)
     {
