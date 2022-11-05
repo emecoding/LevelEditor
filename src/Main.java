@@ -12,6 +12,10 @@ public class Main {
         {
             throw new RuntimeException(e);
         }
+
+
+        editor.PROGRAM_WINDOW_WIDTH = 800;
+        editor.PROGRAM_WINDOW_HEIGHT = 600;
         editor.loop();
     }
 }

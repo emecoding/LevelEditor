@@ -1,4 +1,5 @@
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
@@ -90,6 +91,20 @@ public class Grid
             }
         }
 
+        glBindVertexArray(0);
+        Shader.unbind_every_shader();
+    }
+
+    public void render_single_rect(Vector2f position, Vector2f size)
+    {
+        Shader.unbind_every_shader();
+        this.m_shader.use();
+        Matrix4f transform = new Matrix4f();
+        transform.translate(new Vector3f(position.x, position.y, 0.0f));
+        transform.scale(new Vector3f(size.x, size.y, 1.0f));
+        this.m_shader.upload_mat4("transform", transform);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_LINES, 0, 8);
         glBindVertexArray(0);
         Shader.unbind_every_shader();
     }

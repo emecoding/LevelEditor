@@ -65,6 +65,7 @@ public class Renderer {
         transform.scale(new Vector3f(size.x, size.y, 1.0f));
         m_shader.use();
         m_shader.upload_mat4("transform", transform);
+        m_shader.upload_mat4("view", Camera.ViewMatrix);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);

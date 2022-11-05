@@ -4,20 +4,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelEditor
 {
     private Window m_window;
     private String textures_dir;
     private String final_dir;
-    //private Grid m_grid;
+    private Grid m_grid;
     private TextureManager m_textureManager;
     private Renderer m_renderer;
-    private Texture m_current_item = null;
+    private Camera m_camera;
+    private Integer[] m_current_item = null;
     private List<Integer[]> MAP = new ArrayList<Integer[]>();
     private boolean just_pressed_right_mouse_button = false;
+
+    public int PROGRAM_WINDOW_WIDTH = 0;
+    public int PROGRAM_WINDOW_HEIGHT = 0;
+    public int DEFAULT_CELL_WIDTH = 32;
+    public int DEFAULT_CELL_HEIGHT = 32;
+    public int SCALE_POWER = 5;
+    public int CAMERA_SPEED = 5;
+    public int CAMERA_DIR = 0;//0=LEFT, RIGHT, 1=UP, DOWN
     public LevelEditor(String textures_dir, String final_dir) throws IOException
     {
         this.textures_dir = textures_dir;
@@ -28,30 +36,28 @@ public class LevelEditor
 
         this.m_textureManager = new TextureManager(textures_dir);
         this.m_renderer = new Renderer();
-        //this.m_grid = new Grid();
+        this.m_grid = new Grid();
+        this.m_camera = new Camera(new Vector2f(0.0f, 0.0f));
     }
-
     public void loop()
     {
         while(!this.m_window.should_close())
         {
             this.m_window.clear();
-            //this.m_grid.render();
+            this.move_camera();
             this.render_map();
             this.use_current_item();
             this.use_sprite_buttons();
-
+            this.render_program_window();
             this.m_window.update();
         }
 
         this.destroy();
     }
-
     public void destroy()
     {
         this.m_window.destroy();
     }
-
     private void use_sprite_buttons()
     {
         float start_x = 10.0f;
@@ -81,7 +87,7 @@ public class LevelEditor
 
             if(Window.collides(rect1, rect2) && Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_LEFT))
             {
-                this.m_current_item = tex;
+                this.m_current_item = new Integer[]{i, tex.width, tex.height};
             }
 
             x += button_width + offset;
@@ -98,22 +104,34 @@ public class LevelEditor
         if(this.m_current_item == null)
             return;
 
+        if(Window.key_is_pressed(GLFW_KEY_LEFT))
+            this.m_current_item[1] -= SCALE_POWER;
+        if(Window.key_is_pressed(GLFW_KEY_RIGHT))
+            this.m_current_item[1] += SCALE_POWER;
+        if(Window.key_is_pressed(GLFW_KEY_UP))
+            this.m_current_item[2] += SCALE_POWER;
+        if(Window.key_is_pressed(GLFW_KEY_DOWN))
+            this.m_current_item[2] -= SCALE_POWER;
+
+
         Vector2f mouse_pos = Window.get_mouse_position();
 
-        float x = mouse_pos.x - this.m_current_item.width/2;
-        float y = mouse_pos.y - this.m_current_item.height/2;
+        float x = mouse_pos.x - this.m_current_item[1]/2;
+        float y = mouse_pos.y - this.m_current_item[2]/2;
 
-        x = Math.round(x/this.m_current_item.width)*this.m_current_item.width;
-        y = Math.round(y/this.m_current_item.height)*this.m_current_item.height;
+        x = Math.round(x/DEFAULT_CELL_WIDTH)*DEFAULT_CELL_WIDTH;
+        y = Math.round(y/DEFAULT_CELL_HEIGHT)*DEFAULT_CELL_HEIGHT;
 
-        this.m_current_item.use();
-        this.m_renderer.render_sprite(new Vector2f(x, y), new Vector2f(this.m_current_item.width, this.m_current_item.height));
+        Texture tex = this.m_textureManager.TEXTURES.get(this.m_current_item[0]);
+
+        tex.use();
+        this.m_renderer.render_sprite(new Vector2f(x, y), new Vector2f(this.m_current_item[1], this.m_current_item[2]));
         Texture.unbind_every_texture();
 
         if(Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_RIGHT) && !just_pressed_right_mouse_button)
         {
             just_pressed_right_mouse_button = true;
-            Integer[] i = new Integer[]{this.m_current_item.INDEX, (int)x, (int)y};
+            Integer[] i = new Integer[]{tex.INDEX, (int)x, (int)y, this.m_current_item[1], this.m_current_item[2]};
             this.MAP.add(i);
         }
 
@@ -128,8 +146,48 @@ public class LevelEditor
             Integer[] item = this.MAP.get(i);
             Texture tex = this.m_textureManager.TEXTURES.get(item[0]);
             tex.use();
-            this.m_renderer.render_sprite(new Vector2f(item[1], item[2]), new Vector2f(tex.width, tex.height));
+            this.m_renderer.render_sprite(new Vector2f(item[1], item[2]), new Vector2f(item[3], item[4]));
             Texture.unbind_every_texture();
+        }
+    }
+    private void render_program_window()
+    {
+        if(this.PROGRAM_WINDOW_WIDTH != 0 && this.PROGRAM_WINDOW_HEIGHT != 0)
+        {
+            float x = Window.get_width()/2-this.PROGRAM_WINDOW_WIDTH/2;
+            float y = Window.get_height()/2-this.PROGRAM_WINDOW_HEIGHT/2;
+            this.m_grid.render_single_rect(new Vector2f(x, y), new Vector2f(this.PROGRAM_WINDOW_WIDTH, this.PROGRAM_WINDOW_HEIGHT));
+        }
+    }
+    private void move_camera()
+    {
+        if(Window.key_is_pressed(GLFW_KEY_D))
+        {
+            if(CAMERA_DIR == 0)
+                CAMERA_DIR = 1;
+            else if(CAMERA_DIR == 1)
+                CAMERA_DIR = 0;
+        }
+
+
+        if(Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_MIDDLE))
+        {
+            int speed = -CAMERA_SPEED;
+            if(this.CAMERA_DIR == 0)
+            {
+                if(Window.get_mouse_position().x < Window.get_width()/2)
+                    speed *= -1;
+
+                this.m_camera.Move(new Vector2f(speed, 0.0f));
+            }
+            else if(this.CAMERA_DIR == 1)
+            {
+                if(Window.get_mouse_position().y < Window.get_height()/2)
+                    speed *= -1;
+
+                this.m_camera.Move(new Vector2f(0.0f, speed));
+            }
+
         }
     }
 }
