@@ -15,15 +15,17 @@ public class LevelEditor
     private TextureManager m_textureManager;
     private Renderer m_renderer;
     private Camera m_camera;
-    private Integer[] m_current_item = null;
-    private List<Integer[]> MAP = new ArrayList<Integer[]>();
+    private float[] m_current_item = null;
+    private List<float[]> MAP = new ArrayList<float[]>();
     private boolean just_pressed_right_mouse_button = false;
+    private boolean just_rotated = false;
 
     public int PROGRAM_WINDOW_WIDTH = 0;
     public int PROGRAM_WINDOW_HEIGHT = 0;
     public int DEFAULT_CELL_WIDTH = 32;
     public int DEFAULT_CELL_HEIGHT = 32;
     public int SCALE_POWER = 5;
+    public float ROTATION_POWER = 0.1f;
     public int CAMERA_SPEED = 5;
     public int CAMERA_DIR = 0;//0=LEFT, RIGHT, 1=UP, DOWN
     public LevelEditor(String textures_dir, String final_dir) throws IOException
@@ -87,7 +89,7 @@ public class LevelEditor
 
             if(Window.collides(rect1, rect2) && Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_LEFT))
             {
-                this.m_current_item = new Integer[]{i, tex.width, tex.height};
+                this.m_current_item = new float[]{(float)i, (float)tex.width, (float)tex.height, 0.0f};
             }
 
             x += button_width + offset;
@@ -113,6 +115,16 @@ public class LevelEditor
         if(Window.key_is_pressed(GLFW_KEY_DOWN))
             this.m_current_item[2] -= SCALE_POWER;
 
+        if(Window.key_is_pressed(GLFW_KEY_R) && !just_rotated)
+        {
+            this.m_current_item[3] += ROTATION_POWER;
+            just_rotated = true;
+        }
+        if(!Window.key_is_pressed(GLFW_KEY_R))
+            just_rotated = false;
+
+        if(Window.key_is_pressed(GLFW_KEY_SPACE))
+            ROTATION_POWER += 0.1f;
 
         Vector2f mouse_pos = Window.get_mouse_position();
 
@@ -122,16 +134,16 @@ public class LevelEditor
         x = Math.round(x/DEFAULT_CELL_WIDTH)*DEFAULT_CELL_WIDTH;
         y = Math.round(y/DEFAULT_CELL_HEIGHT)*DEFAULT_CELL_HEIGHT;
 
-        Texture tex = this.m_textureManager.TEXTURES.get(this.m_current_item[0]);
+        Texture tex = this.m_textureManager.TEXTURES.get((int)this.m_current_item[0]);
 
         tex.use();
-        this.m_renderer.render_sprite(new Vector2f(x - Camera.CAMERA_OFF_SET_X, y - Camera.CAMERA_OFF_SET_Y), new Vector2f(this.m_current_item[1], this.m_current_item[2]));
+        this.m_renderer.render_sprite(new Vector2f(x - Camera.CAMERA_OFF_SET_X, y - Camera.CAMERA_OFF_SET_Y), new Vector2f(this.m_current_item[1], this.m_current_item[2]), false, (float)this.m_current_item[3]);
         Texture.unbind_every_texture();
 
         if(Window.mouse_button_is_pressed(GLFW_MOUSE_BUTTON_RIGHT) && !just_pressed_right_mouse_button)
         {
             just_pressed_right_mouse_button = true;
-            Integer[] i = new Integer[]{tex.INDEX, (int)x, (int)y, this.m_current_item[1], this.m_current_item[2]};
+            float[] i = new float[]{tex.INDEX, (int)x, (int)y, this.m_current_item[1], this.m_current_item[2], this.m_current_item[3]};
             this.MAP.add(i);
         }
 
@@ -143,10 +155,10 @@ public class LevelEditor
     {
         for(int i = 0; i < this.MAP.size(); i++)
         {
-            Integer[] item = this.MAP.get(i);
-            Texture tex = this.m_textureManager.TEXTURES.get(item[0]);
+            float[] item = this.MAP.get(i);
+            Texture tex = this.m_textureManager.TEXTURES.get((int)item[0]);
             tex.use();
-            this.m_renderer.render_sprite(new Vector2f(item[1], item[2]), new Vector2f(item[3], item[4]));
+            this.m_renderer.render_sprite(new Vector2f(item[1], item[2]), new Vector2f(item[3], item[4]), true, item[3]);
             Texture.unbind_every_texture();
         }
     }
