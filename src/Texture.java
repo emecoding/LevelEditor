@@ -27,9 +27,11 @@ public class Texture
     private int ID;
     public int width, height;
     public int INDEX;
+    public String PATH;
 
     public Texture(String path, int index) throws IOException {
         this.INDEX = index;
+        this.PATH = path;
         ByteBuffer image;
         ByteBuffer imageBuffer;
         try {

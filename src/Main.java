@@ -6,7 +6,7 @@ public class Main {
         LevelEditor editor = null;
         try
         {
-            editor = new LevelEditor("../../TestImagesForLevelEditor/", "");
+            editor = new LevelEditor("../../TestImagesForLevelEditor/", "../../TestSavesForLevelEditor/", "test01");
         }
         catch (IOException e)
         {

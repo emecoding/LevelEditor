@@ -108,6 +108,10 @@ public class Shader
         use();
         glUniform1i(varLocation, slot);
     }
+    public void upload_float(String name, float fl)
+    {
+        glUniform1f(glGetUniformLocation(programId, name), fl);
+    }
     public void upload_bool(String name, boolean bool)
     {
         int val = 0;

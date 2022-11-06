@@ -73,13 +73,14 @@ public class Renderer {
         Shader.unbind_every_shader();
     }
 
-    public void render_sprite(Vector2f position, Vector2f size, boolean use_view)
+    public void render_sprite(Vector2f position, Vector2f size, boolean use_view, double alpha)
     {
         Shader.unbind_every_shader();
         Matrix4f transform = new Matrix4f();
         transform.translate(new Vector3f(position.x, position.y, 0.0f));
         transform.scale(new Vector3f(size.x, size.y, 1.0f));
         m_shader.use();
+        m_shader.upload_float("ALPHA", (float)alpha);
         m_shader.upload_mat4("transform", transform);
         m_shader.upload_mat4("view", Camera.ViewMatrix);
         m_shader.upload_bool("use_view", use_view);
@@ -99,6 +100,27 @@ public class Renderer {
         transform.translate(new Vector3f(-0.5f*size.x, -0.5f*size.y, 0.0f));
         transform.scale(new Vector3f(size.x, size.y, 1.0f));
         m_shader.use();
+        m_shader.upload_float("ALPHA", 1.0f);
+        m_shader.upload_mat4("transform", transform);
+        m_shader.upload_mat4("view", Camera.ViewMatrix);
+        m_shader.upload_bool("use_view", use_view);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+        Shader.unbind_every_shader();
+    }
+
+    public void render_sprite(Vector2f position, Vector2f size, boolean use_view, float rotation, float alpha)
+    {
+        Shader.unbind_every_shader();
+        Matrix4f transform = new Matrix4f();
+        transform.translate(new Vector3f(position.x, position.y, 0.0f));
+        transform.translate(new Vector3f(0.5f*size.x, 0.5f*size.y, 0.0f));
+        transform.rotate(rotation, new Vector3f(0.0f, 0.0f, 1.0f));
+        transform.translate(new Vector3f(-0.5f*size.x, -0.5f*size.y, 0.0f));
+        transform.scale(new Vector3f(size.x, size.y, 1.0f));
+        m_shader.use();
+        m_shader.upload_float("ALPHA", alpha);
         m_shader.upload_mat4("transform", transform);
         m_shader.upload_mat4("view", Camera.ViewMatrix);
         m_shader.upload_bool("use_view", use_view);
