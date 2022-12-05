@@ -8,6 +8,6 @@ Level Editor V0.01
 Scale the active item with arrow keys.
 Change camera dir with 'd'.
 Move camera by pressing the mouse wheel to the wanted direction of the camera.
-Remove item from map with 'e'.
+Remove item from map with 'e'.e
 Set current item to null with 'v'
 

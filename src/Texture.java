@@ -24,7 +24,7 @@ import static org.lwjgl.system.MemoryUtil.memSlice;
 
 public class Texture
 {
-    private int ID;
+    public int ID;
     public int width, height;
     public int INDEX;
     public String PATH;
